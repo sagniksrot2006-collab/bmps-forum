@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bangladesh Math Problem Solving Society</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #f0f4f8; margin: 0; padding: 0;}
+  header { background: #0d47a1; color: white; padding: 20px; text-align: center; }
+  h1 { margin: 0; }
+  .container { padding: 20px; max-width: 800px; margin: auto; }
+  input, textarea, select, button { width: 100%; padding: 10px; margin: 5px 0; }
+  .problem, .solution { background: white; padding: 10px; margin: 10px 0; border-radius: 5px; }
+  .solution { margin-left: 20px; background: #e3f2fd; }
+  .category { font-weight: bold; color: #0d47a1; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Bangladesh Math Problem Solving Society</h1>
+</header>
+
+<div class="container">
+  <h2>Post a New Problem</h2>
+  <input type="text" id="problemTitle" placeholder="Problem Title">
+  <textarea id="problemDesc" placeholder="Problem Description"></textarea>
+  <select id="problemCategory">
+    <option value="Algebra">Algebra</option>
+    <option value="Geometry">Geometry</option>
+    <option value="Calculus">Calculus</option>
+    <option value="Number Theory">Number Theory</option>
+  </select>
+  <button onclick="addProblem()">Post Problem</button>
+
+  <h2>All Problems</h2>
+  <div id="problemsList"></div>
+</div>
+
+<script>
+let problems = [];
+
+function addProblem() {
+  const title = document.getElementById('problemTitle').value;
+  const desc = document.getElementById('problemDesc').value;
+  const category = document.getElementById('problemCategory').value;
+  if (!title || !desc) { alert('Please fill all fields'); return; }
+
+  const problem = { title, desc, category, solutions: [] };
+  problems.push(problem);
+  document.getElementById('problemTitle').value = '';
+  document.getElementById('problemDesc').value = '';
+  renderProblems();
+}
+
+function addSolution(index) {
+  const solutionInput = document.getElementById('solutionInput' + index);
+  const solutionText = solutionInput.value;
+  if (!solutionText) return;
+  problems[index].solutions.push(solutionText);
+  solutionInput.value = '';
+  renderProblems();
+}
+
+function renderProblems() {
+  const container = document.getElementById('problemsList');
+  container.innerHTML = '';
+  problems.forEach((p, i) => {
+    const problemDiv = document.createElement('div');
+    problemDiv.className = 'problem';
+    problemDiv.innerHTML = `
+      <div class="category">${p.category}</div>
+      <h3>${p.title}</h3>
+      <p>${p.desc}</p>
+      <h4>Solutions:</h4>
+      ${p.solutions.map(s => `<div class="solution">${s}</div>`).join('')}
+      <textarea id="solutionInput${i}" placeholder="Write a solution"></textarea>
+      <button onclick="addSolution(${i})">Post Solution</button>
+    `;
+    container.appendChild(problemDiv);
+  });
+}
+
+</script>
+</body>
+</html>
